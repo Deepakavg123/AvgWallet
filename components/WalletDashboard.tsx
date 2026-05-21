@@ -1,0 +1,530 @@
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
+import { Send, Plus, RefreshCw, Menu, Copy, Check, Eye, EyeOff, Download, Home, Clock, User } from 'lucide-react';
+import { MultiChainWallet, BlockchainNetwork, Token } from '@/types';
+import { StorageService } from '@/services/storageService';
+import { BlockchainService } from '@/services/blockchainService';
+import { NETWORKS, COMMON_TOKENS } from '@/config/networks';
+import SendTransaction from './SendTransaction';
+import AddToken from './AddToken';
+import TransactionHistory from './TransactionHistory';
+import ExportWallet from './ExportWallet';
+
+type FooterTab = 'assets' | 'history' | 'account';
+
+export default function WalletDashboard() {
+  const [wallet, setWallet] = useState<MultiChainWallet | null>(null);
+  const [selectedNetwork, setSelectedNetwork] = useState<BlockchainNetwork>('ethereum');
+  const [balances, setBalances] = useState<Record<string, string>>({});
+  const [tokenBalances, setTokenBalances] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [showSend, setShowSend] = useState(false);
+  const [showAddToken, setShowAddToken] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showExport, setShowExport] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [showAddress, setShowAddress] = useState(false);
+  const [activeTab, setActiveTab] = useState<FooterTab>('assets');
+  const [userTokens, setUserTokens] = useState<Token[]>([]);
+
+  const loadWallet = () => {
+    const storedWallet = StorageService.getWallet();
+    if (storedWallet) {
+      setWallet(storedWallet);
+    }
+    setLoading(false);
+  };
+
+  const loadUserTokens = () => {
+    const tokens = StorageService.getTokens();
+    setUserTokens(tokens);
+  };
+
+  const isPlaceholderAddress = (address: string): boolean => {
+    // Check if address is a placeholder (0x0000... for EVM, 1111... for others)
+    return address.startsWith('0x0000') || address.startsWith('1111');
+  };
+
+  const fetchBalances = useCallback(async () => {
+    if (!wallet) return;
+
+    setRefreshing(true);
+    const newBalances: Record<string, string> = {};
+
+    try {
+      const networks: BlockchainNetwork[] = ['ethereum', 'polygon', 'binance', 'base', 'solana', 'bitcoin'];
+
+      for (const network of networks) {
+        const account = wallet.accounts[network];
+
+        // Skip fetching balance for placeholder addresses
+        if (isPlaceholderAddress(account.address)) {
+          newBalances[network] = '0';
+          continue;
+        }
+
+        try {
+          const balance = await BlockchainService.getBalance(account.address, network);
+          newBalances[network] = balance;
+        } catch (error) {
+          console.error(`Error fetching ${network} balance:`, error);
+          newBalances[network] = '0'; // Set to 0 on error
+        }
+      }
+
+      setBalances(newBalances);
+    } catch (error) {
+      console.error('Error fetching balances:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [wallet]);
+
+  const fetchTokenBalances = useCallback(async () => {
+    if (!wallet) return;
+
+    const currentAccount = wallet.accounts[selectedNetwork];
+
+    // Skip if placeholder address or non-EVM network
+    if (isPlaceholderAddress(currentAccount.address) ||
+        !['ethereum', 'polygon', 'binance', 'base'].includes(selectedNetwork)) {
+      return;
+    }
+
+    const newTokenBalances: Record<string, string> = {};
+
+    try {
+      // Fetch common tokens (USDC, USDT) for the current network
+      const commonTokens = COMMON_TOKENS[selectedNetwork] || [];
+
+      for (const token of commonTokens) {
+        try {
+          const { balance } = await BlockchainService.getTokenBalance(
+            token.address,
+            currentAccount.address,
+            selectedNetwork
+          );
+          newTokenBalances[`${selectedNetwork}-${token.address}`] = balance;
+        } catch (error) {
+          console.error(`Error fetching ${token.symbol} balance:`, error);
+          newTokenBalances[`${selectedNetwork}-${token.address}`] = '0';
+        }
+      }
+
+      // Fetch user-added tokens for the current network
+      const networkUserTokens = userTokens.filter(t => t.network === selectedNetwork);
+
+      for (const token of networkUserTokens) {
+        try {
+          const { balance } = await BlockchainService.getTokenBalance(
+            token.address,
+            currentAccount.address,
+            selectedNetwork
+          );
+          newTokenBalances[`${selectedNetwork}-${token.address}`] = balance;
+        } catch (error) {
+          console.error(`Error fetching ${token.symbol} balance:`, error);
+          newTokenBalances[`${selectedNetwork}-${token.address}`] = '0';
+        }
+      }
+
+      setTokenBalances(newTokenBalances);
+    } catch (error) {
+      console.error('Error fetching token balances:', error);
+    }
+  }, [wallet, selectedNetwork, userTokens]);
+
+  useEffect(() => {
+    loadWallet();
+    loadUserTokens();
+  }, []);
+
+  useEffect(() => {
+    if (wallet) {
+      fetchBalances();
+      fetchTokenBalances();
+    }
+  }, [wallet, selectedNetwork, userTokens, fetchBalances, fetchTokenBalances]);
+
+  const handleCopyAddress = () => {
+    if (wallet) {
+      const address = wallet.accounts[selectedNetwork].address;
+      navigator.clipboard.writeText(address);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const formatAddress = (address: string) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  };
+
+  const formatBalance = (balance: string) => {
+    const num = parseFloat(balance);
+    if (num === 0) return '0';
+    if (num < 0.0001) return '< 0.0001';
+    return num.toFixed(4);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="spinner" />
+      </div>
+    );
+  }
+
+  if (!wallet) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="text-center">
+          <p className="text-gray-600">No wallet found</p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentAccount = wallet.accounts[selectedNetwork];
+  const currentBalance = balances[selectedNetwork] || '0';
+  const networkConfig = NETWORKS[selectedNetwork];
+
+  if (showSend) {
+    return (
+      <SendTransaction
+        wallet={wallet}
+        network={selectedNetwork}
+        onBack={() => setShowSend(false)}
+        onSuccess={() => {
+          setShowSend(false);
+          fetchBalances();
+        }}
+      />
+    );
+  }
+
+  if (showAddToken) {
+    return (
+      <AddToken
+        network={selectedNetwork}
+        onBack={() => setShowAddToken(false)}
+        onTokenAdded={() => {
+          setShowAddToken(false);
+          loadUserTokens();
+        }}
+      />
+    );
+  }
+
+  if (showHistory) {
+    return (
+      <TransactionHistory
+        address={currentAccount.address}
+        network={selectedNetwork}
+        onBack={() => {
+          setShowHistory(false);
+          setActiveTab('assets');
+        }}
+      />
+    );
+  }
+
+  if (showExport) {
+    return (
+      <ExportWallet
+        wallet={wallet}
+        onBack={() => setShowExport(false)}
+      />
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-trust-blue to-blue-700 pt-12 pb-32 px-6 rounded-b-3xl">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-white text-2xl font-bold">Wallet</h1>
+          <button
+            onClick={() => setShowMenu(!showMenu)}
+            className="text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
+          >
+            <Menu className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Network Selector */}
+        <div className="mb-6 overflow-x-auto">
+          <div className="flex gap-2 pb-2">
+            {Object.entries(NETWORKS).map(([key, network]) => (
+              <button
+                key={key}
+                onClick={() => setSelectedNetwork(key as BlockchainNetwork)}
+                className={`px-4 py-2 rounded-xl font-medium transition-all whitespace-nowrap
+                  ${selectedNetwork === key
+                    ? 'bg-white text-trust-blue'
+                    : 'bg-white/10 text-white hover:bg-white/20'
+                  }`}
+              >
+                <span className="mr-2">{network.logo}</span>
+                {network.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Balance Card */}
+        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-blue-100 text-sm">Total Balance</p>
+            <button
+              onClick={fetchBalances}
+              disabled={refreshing}
+              className="text-white p-1 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <RefreshCw className={`w-5 h-5 ${refreshing ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+
+          <div className="mb-4">
+            <h2 className="text-white text-4xl font-bold mb-1">
+              {formatBalance(currentBalance)}
+            </h2>
+            <p className="text-blue-100 text-lg">
+              {networkConfig.symbol}
+            </p>
+          </div>
+
+          {/* Address */}
+          <div className="flex items-center gap-2 bg-white/10 rounded-xl px-3 py-2">
+            <button
+              onClick={() => setShowAddress(!showAddress)}
+              className="text-white hover:text-blue-100 transition-colors"
+            >
+              {showAddress ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+            <span className="text-white font-mono text-sm flex-1">
+              {showAddress ? currentAccount.address : formatAddress(currentAccount.address)}
+            </span>
+            <button
+              onClick={handleCopyAddress}
+              className="text-white hover:text-blue-100 transition-colors"
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="px-6 -mt-20 mb-6">
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            onClick={() => setShowSend(true)}
+            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl
+                       transition-all active:scale-95 flex flex-col items-center gap-3"
+          >
+            <div className="bg-trust-blue text-white p-4 rounded-full">
+              <Send className="w-6 h-6" />
+            </div>
+            <span className="font-semibold text-gray-900">Send</span>
+          </button>
+
+          <button
+            onClick={() => setShowAddToken(true)}
+            disabled={!['ethereum', 'polygon', 'binance', 'base'].includes(selectedNetwork)}
+            className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl
+                       transition-all active:scale-95 flex flex-col items-center gap-3
+                       disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <div className="bg-trust-blue text-white p-4 rounded-full">
+              <Plus className="w-6 h-6" />
+            </div>
+            <span className="font-semibold text-gray-900">Add Token</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Assets */}
+      <div className="px-6 pb-24">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Assets</h3>
+
+        <div className="space-y-3">
+          {/* Native Currency */}
+          <div className="card-hover">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-xl"
+                  style={{ backgroundColor: `${networkConfig.color}20` }}
+                >
+                  {networkConfig.logo}
+                </div>
+                <div>
+                  <p className="font-semibold text-gray-900">{networkConfig.symbol}</p>
+                  <p className="text-sm text-gray-500">{networkConfig.name}</p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="font-semibold text-gray-900">
+                  {formatBalance(currentBalance)}
+                </p>
+                <p className="text-sm text-gray-500">{networkConfig.symbol}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Common Tokens (USDC, USDT, etc.) */}
+          {['ethereum', 'polygon', 'binance', 'base'].includes(selectedNetwork) &&
+            COMMON_TOKENS[selectedNetwork]?.map((token) => {
+              const tokenKey = `${selectedNetwork}-${token.address}`;
+              const balance = tokenBalances[tokenKey] || '0';
+
+              return (
+                <div key={tokenKey} className="card-hover">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <span className="text-blue-600 font-semibold text-sm">
+                          {token.symbol.substring(0, 2)}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">{token.symbol}</p>
+                        <p className="text-sm text-gray-500">{token.name}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-gray-900">
+                        {formatBalance(balance)}
+                      </p>
+                      <p className="text-sm text-gray-500">{token.symbol}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+          {/* User-Added Tokens */}
+          {userTokens
+            .filter((token) => token.network === selectedNetwork)
+            .map((token) => {
+              const tokenKey = `${selectedNetwork}-${token.address}`;
+              const balance = tokenBalances[tokenKey] || '0';
+
+              return (
+                <div key={tokenKey} className="card-hover">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                        <span className="text-green-600 font-semibold text-sm">
+                          {token.symbol.substring(0, 2)}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900">{token.symbol}</p>
+                        <p className="text-sm text-gray-500">{token.name}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-gray-900">
+                        {formatBalance(balance)}
+                      </p>
+                      <p className="text-sm text-gray-500">{token.symbol}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+        </div>
+      </div>
+
+      {/* Menu Modal */}
+      {showMenu && (
+        <div
+          className="fixed inset-0 bg-black/50 z-50 flex items-end animate-fadeIn"
+          onClick={() => {
+            setShowMenu(false);
+            setActiveTab('assets');
+          }}
+        >
+          <div
+            className="bg-white w-full rounded-t-3xl p-6 animate-slideUp"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-6" />
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setShowMenu(false);
+                  setActiveTab('assets');
+                  setShowExport(true);
+                }}
+                className="w-full text-left px-4 py-3 hover:bg-gray-50 rounded-xl
+                           text-gray-900 font-medium flex items-center gap-3"
+              >
+                <Download className="w-5 h-5 text-trust-blue" />
+                Export Wallet
+              </button>
+              <button
+                onClick={() => {
+                  setShowMenu(false);
+                  // Add logout functionality
+                  StorageService.deleteWallet();
+                  window.location.reload();
+                }}
+                className="w-full text-left px-4 py-3 hover:bg-gray-50 rounded-xl
+                           text-red-600 font-medium flex items-center gap-3"
+              >
+                <span className="text-xl">⚠️</span>
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer Navigation */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-40">
+        <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
+          <button
+            onClick={() => setActiveTab('assets')}
+            className={`flex flex-col items-center gap-1 py-2 transition-colors ${
+              activeTab === 'assets' ? 'text-trust-blue' : 'text-gray-500'
+            }`}
+          >
+            <Home className="w-6 h-6" />
+            <span className="text-xs font-medium">Assets</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('history');
+              setShowHistory(true);
+            }}
+            className={`flex flex-col items-center gap-1 py-2 transition-colors ${
+              activeTab === 'history' ? 'text-trust-blue' : 'text-gray-500'
+            }`}
+          >
+            <Clock className="w-6 h-6" />
+            <span className="text-xs font-medium">History</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('account');
+              setShowMenu(true);
+            }}
+            className={`flex flex-col items-center gap-1 py-2 transition-colors ${
+              activeTab === 'account' ? 'text-trust-blue' : 'text-gray-500'
+            }`}
+          >
+            <User className="w-6 h-6" />
+            <span className="text-xs font-medium">Account</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
