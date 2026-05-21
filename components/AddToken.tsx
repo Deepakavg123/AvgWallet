@@ -114,7 +114,7 @@ export default function AddToken({ network, onBack, onTokenAdded }: AddTokenProp
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <div className="bg-trust-blue text-white p-6">
+      <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-6 rounded-b-3xl shadow-2xl">
         <button
           onClick={onBack}
           className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity"
@@ -132,7 +132,7 @@ export default function AddToken({ network, onBack, onTokenAdded }: AddTokenProp
         {/* Popular Tokens */}
         {commonTokens.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            <h2 className="text-lg font-semibold text-gray-700 mb-2">
               Popular Tokens
             </h2>
             <div className="space-y-2">
@@ -149,8 +149,8 @@ export default function AddToken({ network, onBack, onTokenAdded }: AddTokenProp
                       </span>
                     </div>
                     <div className="text-left">
-                      <p className="font-semibold text-gray-900">{token.symbol}</p>
-                      <p className="text-sm text-gray-500">{token.name}</p>
+                      <p className="font-semibold text-white">{token.symbol}</p>
+                      <p className="text-sm text-gray-400">{token.name}</p>
                     </div>
                   </div>
                   <Plus className="w-5 h-5 text-trust-blue" />
@@ -199,7 +199,7 @@ export default function AddToken({ network, onBack, onTokenAdded }: AddTokenProp
           )}
 
           {tokenInfo && (
-            <div className="bg-gray-50 rounded-xl p-6 mb-4">
+            <div className="bg-[#A0E817]/15 rounded-xl p-6 mb-4">
               <h3 className="font-semibold text-gray-900 mb-4">
                 Token Information
               </h3>
@@ -209,11 +209,11 @@ export default function AddToken({ network, onBack, onTokenAdded }: AddTokenProp
                   <span className="font-medium text-gray-900">{tokenInfo.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Symbol:</span>
+                  <span className="text-[#A0E817]">Symbol:</span>
                   <span className="font-medium text-gray-900">{tokenInfo.symbol}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Decimals:</span>
+                  <span className="text-[#A0E817]">Decimals:</span>
                   <span className="font-medium text-gray-900">{tokenInfo.decimals}</span>
                 </div>
               </div>

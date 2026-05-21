@@ -10,6 +10,7 @@ import SendTransaction from './SendTransaction';
 import AddToken from './AddToken';
 import TransactionHistory from './TransactionHistory';
 import ExportWallet from './ExportWallet';
+import { ChevronDown } from 'lucide-react';
 
 type FooterTab = 'assets' | 'history' | 'account';
 
@@ -25,6 +26,7 @@ export default function WalletDashboard() {
   const [showHistory, setShowHistory] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [showNetworkDropdown, setShowNetworkDropdown] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showAddress, setShowAddress] = useState(false);
   const [activeTab, setActiveTab] = useState<FooterTab>('assets');
@@ -243,9 +245,27 @@ export default function WalletDashboard() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-br from-trust-blue to-blue-700 pt-12 pb-32 px-6 rounded-b-3xl">
+      <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] pt-12 pb-20 px-6 rounded-b-3xl">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-white text-2xl font-bold">Wallet</h1>
+          <div className="flex items-center gap-3">
+  <div className="p-2 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/10 shadow-lg">
+    <img
+      src="/logo.png"
+      alt="Company Logo"
+      className="w-8 h-8 object-contain"
+    />
+  </div>
+
+  <div>
+    <h1 className="text-white text-2xl font-bold tracking-wide">
+      AGILAVETRI
+    </h1>
+
+    <p className="text-xs text-[#A0E817] uppercase tracking-[0.2em]">
+      Web3 Wallet
+    </p>
+  </div>
+</div>
           <button
             onClick={() => setShowMenu(!showMenu)}
             className="text-white p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -255,27 +275,82 @@ export default function WalletDashboard() {
         </div>
 
         {/* Network Selector */}
-        <div className="mb-6 overflow-x-auto">
-          <div className="flex gap-2 pb-2">
-            {Object.entries(NETWORKS).map(([key, network]) => (
-              <button
-                key={key}
-                onClick={() => setSelectedNetwork(key as BlockchainNetwork)}
-                className={`px-4 py-2 rounded-xl font-medium transition-all whitespace-nowrap
-                  ${selectedNetwork === key
-                    ? 'bg-white text-trust-blue'
-                    : 'bg-white/10 text-white hover:bg-white/20'
-                  }`}
+        {/* NETWORK DROPDOWN */}
+          <div className="relative mb-6">
+            <button
+              onClick={() =>
+                setShowNetworkDropdown(!showNetworkDropdown)
+              }
+              className="w-full flex items-center justify-between
+                        bg-white/5 border border-white/10
+                        backdrop-blur-xl rounded-2xl
+                        px-4 py-3 text-white
+                        hover:border-[#A0E817]/40
+                        transition-all"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-lg">
+                  {networkConfig.logo}
+                </span>
+
+                <span className="font-medium">
+                  {networkConfig.name}
+                </span>
+              </div>
+
+              <ChevronDown
+                className={`w-5 h-5 transition-transform ${
+                  showNetworkDropdown
+                    ? 'rotate-180'
+                    : ''
+                }`}
+              />
+            </button>
+
+            {showNetworkDropdown && (
+              <div
+                className="absolute top-full left-0 right-0 mt-3
+                          bg-[#101827]/95 backdrop-blur-2xl
+                          border border-white/10
+                          rounded-2xl overflow-hidden
+                          shadow-2xl z-50"
               >
-                <span className="mr-2">{network.logo}</span>
-                {network.name}
-              </button>
-            ))}
+                {Object.entries(NETWORKS).map(
+                  ([key, network]) => (
+                    <button
+                      key={key}
+                      onClick={() => {
+                        setSelectedNetwork(
+                          key as BlockchainNetwork
+                        );
+
+                        setShowNetworkDropdown(false);
+                      }}
+                      className={`w-full flex items-center gap-3
+                                px-4 py-4 text-left
+                                transition-all border-b border-white/5
+                                ${
+                                  selectedNetwork === key
+                                    ? 'bg-[#A0E817]/15 text-[#A0E817]'
+                                    : 'text-white hover:bg-white/5'
+                                }`}
+                    >
+                      <span className="text-lg">
+                        {network.logo}
+                      </span>
+
+                      <span className="font-medium">
+                        {network.name}
+                      </span>
+                    </button>
+                  )
+                )}
+              </div>
+            )}
           </div>
-        </div>
 
         {/* Balance Card */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6">
+        <div className="bg-white/5 border border-white/10 backdrop-blur-2xl rounded-2xl p-6 shadow-2xl">
           <div className="flex items-center justify-between mb-4">
             <p className="text-blue-100 text-sm">Total Balance</p>
             <button
@@ -318,14 +393,14 @@ export default function WalletDashboard() {
       </div>
 
       {/* Action Buttons */}
-      <div className="px-6 -mt-20 mb-6">
+      <div className="px-6 -mt-12 mb-6">
         <div className="grid grid-cols-2 gap-4">
           <button
             onClick={() => setShowSend(true)}
             className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl
                        transition-all active:scale-95 flex flex-col items-center gap-3"
           >
-            <div className="bg-trust-blue text-white p-4 rounded-full">
+            <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-4 rounded-full shadow-lg">
               <Send className="w-6 h-6" />
             </div>
             <span className="font-semibold text-gray-900">Send</span>
@@ -338,7 +413,7 @@ export default function WalletDashboard() {
                        transition-all active:scale-95 flex flex-col items-center gap-3
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="bg-trust-blue text-white p-4 rounded-full">
+            <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-4 rounded-full shadow-lg">
               <Plus className="w-6 h-6" />
             </div>
             <span className="font-semibold text-gray-900">Add Token</span>
