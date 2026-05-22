@@ -297,9 +297,9 @@ export default function CreateWallet({ onWalletCreated, onBack }: CreateWalletPr
           <div className="space-y-4">
             <button
               onClick={handleCreateWallet}
-              className="w-full bg-trust-blue text-white p-6 rounded-2xl
-                         hover:bg-blue-600 transition-all duration-200 active:scale-95
-                         flex items-center gap-4"
+              className="primary-theme-btn w-full text-white p-6 rounded-2xl
+           transition-all duration-200 active:scale-95
+           flex items-center gap-4"
             >
               <div className="bg-white/20 p-3 rounded-xl">
                 <PlusCircle className="w-6 h-6" />
@@ -318,8 +318,8 @@ export default function CreateWallet({ onWalletCreated, onBack }: CreateWalletPr
                          hover:bg-gray-200 transition-all duration-200 active:scale-95
                          flex items-center gap-4"
             >
-              <div className="bg-white p-3 rounded-xl">
-                <Download className="w-6 h-6 text-trust-blue" />
+              <div className=" bg-white p-3 rounded-xl">
+                <Download className="w-6 h-6 text-[#1A2B4C]" />
               </div>
               <div className="text-left">
                 <h3 className="font-semibold text-lg">Import Wallet</h3>
@@ -378,8 +378,8 @@ export default function CreateWallet({ onWalletCreated, onBack }: CreateWalletPr
               <div className="absolute inset-0 flex items-center justify-center">
                 <button
                   onClick={() => setShowMnemonic(true)}
-                  className="bg-trust-blue text-white px-6 py-3 rounded-xl
-                             hover:bg-blue-600 transition-all flex items-center gap-2"
+                  className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white px-6 py-3 rounded-xl
+                             hover:opacity-90 transition-all flex items-center gap-2"
                 >
                   <Eye className="w-5 h-5" />
                   Reveal Phrase
@@ -412,8 +412,8 @@ export default function CreateWallet({ onWalletCreated, onBack }: CreateWalletPr
                   type="checkbox"
                   checked={confirmed}
                   onChange={(e) => setConfirmed(e.target.checked)}
-                  className="w-5 h-5 rounded border-gray-300 text-trust-blue
-                             focus:ring-trust-blue"
+                  className="w-5 h-5 rounded border-gray-300 accent-[#1A2B4C]
+                             focus:ring-[#1A2B4C]"
                 />
                 <span className="text-sm text-gray-700">
                   I have saved my recovery phrase securely

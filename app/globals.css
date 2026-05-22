@@ -73,10 +73,15 @@ body {
 .animate-slideUp {
   animation: slideUp 0.3s ease-out;
 }
-
 /* Button styles */
 .btn-primary {
-  background-color: #3375bb;
+  background: linear-gradient(
+    to bottom right,
+    #0B1220,
+    #1A2B4C,
+    #1E3A5F
+  );
+
   color: white;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
@@ -85,7 +90,7 @@ body {
 }
 
 .btn-primary:hover {
-  background-color: #2563eb;
+  filter: brightness(1.08);
 }
 
 .btn-primary:active {
@@ -120,8 +125,8 @@ body {
 }
 
 .btn-outline {
-  border: 2px solid #3375bb;
-  color: #3375bb;
+  border: 2px solid #1A2B4C;
+  color: #1A2B4C;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
   border-radius: 0.75rem;
@@ -130,7 +135,7 @@ body {
 }
 
 .btn-outline:hover {
-  background-color: #3375bb;
+  background-color: #1A2B4C;
   color: white;
 }
 
@@ -217,6 +222,50 @@ body {
   border-radius: 9999px;
   animation: spin 1s linear infinite;
 }
+
+
+
+
+/* =========================
+   AGILAVETRI THEME BUTTON
+========================= */
+
+.primary-theme-btn {
+  background: linear-gradient(
+    to bottom right,
+    #0B1220,
+    #1A2B4C,
+    #1E3A5F
+  );
+
+  color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  transition: all 0.3s ease;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Hover Effect */
+.primary-theme-btn:hover {
+  background: #FF9902;
+
+  color: #0B1220;
+
+  box-shadow:
+    0 10px 35px rgba(160,232,23,0.22);
+
+  transform: translateY(-2px);
+}
+
+/* Active Click */
+.primary-theme-btn:active {
+  transform: scale(0.97);
+}
+
+
 
 @keyframes spin {
   to { transform: rotate(360deg); }

@@ -400,10 +400,10 @@ export default function WalletDashboard() {
             className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl
                        transition-all active:scale-95 flex flex-col items-center gap-3"
           >
-            <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-4 rounded-full shadow-lg">
+            <div className="primary-theme-btn bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-4 rounded-full shadow-lg">
               <Send className="w-6 h-6" />
             </div>
-            <span className="font-semibold text-gray-900">Send</span>
+            <span className=" font-semibold text-gray-900" >Send</span>
           </button>
 
           <button
@@ -413,7 +413,7 @@ export default function WalletDashboard() {
                        transition-all active:scale-95 flex flex-col items-center gap-3
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-4 rounded-full shadow-lg">
+            <div className="primary-theme-btn bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-4 rounded-full shadow-lg">
               <Plus className="w-6 h-6" />
             </div>
             <span className="font-semibold text-gray-900">Add Token</span>

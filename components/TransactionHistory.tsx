@@ -65,7 +65,7 @@ export default function TransactionHistory({
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <div className="bg-trust-blue text-white p-6">
+      <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-6 rounded-b-3xl shadow-2xl">
         <button
           onClick={onBack}
           className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity"

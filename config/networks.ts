@@ -4,42 +4,45 @@ import { NetworkConfig } from '@/types';
 // For production, consider using your own RPC endpoints for better reliability
 
 export const NETWORKS: Record<string, NetworkConfig> = {
-  ethereum: {
-    name: 'Ethereum',
-    symbol: 'ETH',
-    chainId: 1,
-    rpcUrl: 'https://eth.llamarpc.com',  // Free public RPC
-    explorer: 'https://etherscan.io',
-    logo: '⟠',
-    color: '#627EEA',
-  },
-  polygon: {
-    name: 'Polygon',
-    symbol: 'MATIC',
-    chainId: 137,
-    rpcUrl: 'https://polygon-rpc.com',  // Free public RPC
-    explorer: 'https://polygonscan.com',
-    logo: '⬡',
-    color: '#8247E5',
-  },
   binance: {
-    name: 'BNB Smart Chain',
-    symbol: 'BNB',
-    chainId: 56,
-    rpcUrl: 'https://bsc-dataseed.binance.org',  // Free public RPC
-    explorer: 'https://bscscan.com',
-    logo: '◆',
-    color: '#F3BA2F',
-  },
-  base: {
-    name: 'Base',
-    symbol: 'ETH',
-    chainId: 8453,
-    rpcUrl: 'https://mainnet.base.org',  // Free public RPC
-    explorer: 'https://basescan.org',
-    logo: '🔵',
-    color: '#0052FF',
-  },
+  name: 'BNB Smart Chain',
+  symbol: 'BNB',
+  chainId: 56,
+  rpcUrl: `https://rpc.ankr.com/bsc/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
+  explorer: 'https://bscscan.com',
+  logo: '◆',
+  color: '#F3BA2F',
+},
+
+ethereum: {
+  name: 'Ethereum',
+  symbol: 'ETH',
+  chainId: 1,
+  rpcUrl: `https://rpc.ankr.com/eth/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
+  explorer: 'https://etherscan.io',
+  logo: '⟠',
+  color: '#627EEA',
+},
+
+polygon: {
+  name: 'Polygon',
+  symbol: 'MATIC',
+  chainId: 137,
+  rpcUrl: `https://rpc.ankr.com/polygon/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
+  explorer: 'https://polygonscan.com',
+  logo: '⬡',
+  color: '#8247E5',
+},
+
+base: {
+  name: 'Base',
+  symbol: 'ETH',
+  chainId: 8453,
+  rpcUrl: `https://rpc.ankr.com/base/${process.env.NEXT_PUBLIC_ANKR_API_KEY}`,
+  explorer: 'https://basescan.org',
+  logo: '🔵',
+  color: '#0052FF',
+},
   solana: {
     name: 'Solana',
     symbol: 'SOL',

@@ -16,6 +16,7 @@ export default function ExportWallet({ wallet, onBack }: ExportWalletProps) {
   const [copiedMnemonic, setCopiedMnemonic] = useState(false);
   const [copiedPrivateKey, setCopiedPrivateKey] = useState('');
   const [confirmed, setConfirmed] = useState(false);
+  const [agreed, setAgreed] = useState(false);
 
   const handleCopyMnemonic = () => {
     navigator.clipboard.writeText(wallet.mnemonic);
@@ -89,8 +90,8 @@ export default function ExportWallet({ wallet, onBack }: ExportWalletProps) {
           <label className="flex items-start gap-3 mb-6 cursor-pointer">
             <input
               type="checkbox"
-              checked={confirmed}
-              onChange={(e) => setConfirmed(e.target.checked)}
+              checked={agreed}
+              onChange={(e) => setAgreed(e.target.checked)}
               className="w-5 h-5 rounded border-gray-300 text-trust-blue
                          focus:ring-trust-blue mt-0.5"
             />
@@ -101,8 +102,26 @@ export default function ExportWallet({ wallet, onBack }: ExportWalletProps) {
 
           <button
             onClick={() => setConfirmed(true)}
-            disabled={!confirmed}
-            className="w-full btn-primary"
+            disabled={!agreed}
+            className="
+              w-full
+              bg-gradient-to-br
+              from-[#0B1220]
+              via-[#1A2B4C]
+              to-[#1E3A5F]
+              text-white
+              p-4
+              rounded-[28px]
+              shadow-2xl
+              border
+              border-white/10
+              hover:scale-[1.02]
+              transition-all
+              duration-300
+              active:scale-95
+              disabled:opacity-40
+              disabled:cursor-not-allowed
+              "
           >
             Continue
           </button>

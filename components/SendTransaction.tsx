@@ -114,7 +114,7 @@ export default function SendTransaction({
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-      <div className="bg-trust-blue text-white p-6">
+      <div className="bg-gradient-to-br from-[#0B1220] via-[#1A2B4C] to-[#1E3A5F] text-white p-6 rounded-b-3xl shadow-2xl">
         <button
           onClick={onBack}
           className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity"
@@ -177,9 +177,9 @@ export default function SendTransaction({
             </label>
             <button
               onClick={handleMaxAmount}
-              className="text-trust-blue text-sm font-medium hover:underline"
+              className="text-[#FF9902] text-sm font-medium hover:underline"
             >
-              Max
+             <strong>Max</strong>
             </button>
           </div>
           <div className="relative">
@@ -226,7 +226,28 @@ export default function SendTransaction({
         <button
           onClick={handleSend}
           disabled={loading || !recipient || !amount}
-          className="w-full btn-primary flex items-center justify-center gap-2"
+          className="
+              primary-theme-btn
+              w-full
+              bg-gradient-to-br
+              from-[#0B1220]
+              via-[#1A2B4C]
+              to-[#1E3A5F]
+              text-white
+              p-6
+              rounded-[28px]
+              shadow-2xl
+              border
+              border-white/10
+              hover:scale-[1.02]
+              transition-all
+              duration-300
+              active:scale-95
+              flex
+              items-center
+              justify-center
+              gap-2
+              "
         >
           {loading ? (
             <>

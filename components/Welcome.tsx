@@ -188,30 +188,38 @@ export default function Welcome({
 
       {/* Get Started Button */}
       <button
-        onClick={onGetStarted}
-        className="
-          w-full
-          max-w-md
-          bg-gradient-to-r
-          from-[#0063CE]
-          to-[#0B1220]
-          text-white
-          font-bold
-          py-5
-          rounded-[28px]
-          border
-          border-white/10
-          hover:scale-[1.02]
-          transition-all
-          duration-300
-          active:scale-95
-          shadow-[0_10px_30px_rgba(0,0,0,0.35)]
-          relative
-          z-10
-        "
-      >
-        Get Started
-      </button>
+  onClick={onGetStarted}
+  className="
+    w-full
+    max-w-md
+
+    bg-white
+
+    text-[#0B1220]
+    font-bold
+    text-lg
+
+    py-5
+    rounded-[30px]
+
+    border
+    border-white
+
+    hover:bg-[#ffad33]
+
+    transition-all
+    duration-300
+
+    active:scale-95
+
+    shadow-[0_10px_35px_rgba(160,232,23,0.28)]
+
+    relative
+    z-10
+  "
+>
+  Get Started
+</button>
     </div>
   )
 }

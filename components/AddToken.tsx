@@ -181,7 +181,7 @@ export default function AddToken({ network, onBack, onTokenAdded }: AddTokenProp
               <button
                 onClick={handleSearchToken}
                 disabled={loading}
-                className="btn-primary px-4 flex items-center gap-2"
+                className="primary-theme-btn btn-primary px-4 flex items-center gap-2"
               >
                 {loading ? (
                   <div className="spinner" />
