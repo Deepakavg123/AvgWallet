@@ -1,107 +1,212 @@
-# AVG Wallet Web3 App
+# AGILAVETRI Wallet
 
-![alt text](https://www.daulathussain.com/wp-content/uploads/2025/11/Create-Deploy-Trust-Wallet-Clone-Web3-App-Using-Next.js-Solana-Bitcoin-EVM-Chains-Full-Stack-Web3-Wallet.jpg)
+A modern multi-chain non-custodial crypto wallet built using Next.js, TypeScript, ethers.js, Ankr RPC and Alchemy.
 
-- [Final Source Code](https://www.theblockchaincoders.com/sourceCode/create-and-deploy-trust-wallet-clone-web3-app-using-next.js-or-solana-bitcoin-and-evm-chains-or-full-stack-web3-wallet)
+---
 
-#### Setup Video
+## 🚀 Features
 
-- [Final Code Setup video](https://youtu.be/tcY36SZoqqI?si=iMx-lgycLdGv7uHI)
+### ✅ Multi-Chain Support
 
-## Project Overview
+Currently supported chains:
 
-Create & Deploy Trust Wallet Clone Web3 App Using Next.js | Solana, Bitcoin & EVM Chains | Full-Stack Web3 Wallet
+* Ethereum
+* BNB Smart Chain
+* Polygon
+* Base
+* Solana
+* Bitcoin
 
-In this full tutorial, you’ll learn how to build and deploy a complete Trust Wallet Clone App using Next.js, supporting Solana, Bitcoin, and EVM-based blockchains (Ethereum, BSC, Polygon, Base). 🌐
+---
 
-We’ll cover everything from wallet creation, key management, and multi-chain integration to local storage, token balance display, and transaction handling — all in one production-ready Web3 wallet app.
+## ✨ Current Functionalities
 
-🚀 What You’ll Learn:
+### 🔐 Wallet Management
 
-- Building a full Trust Wallet UI in Next.js
-- Integrating Solana, Bitcoin, and EVM chains
-- Managing wallets, accounts & transactions
-- Connecting to DApps & handling crypto assets
-- Secure local storage for user data
-- Deploying your wallet app for real use
+* Create new wallet
+* Import wallet using recovery phrase
+* Import wallet using private key
+* Export recovery phrase
+* Export private keys
+* Multi-network account generation
 
-💡 Perfect for Blockchain Developers, Web3 Builders, and Next.js Enthusiasts who want to master multi-chain wallet development.
+### 💸 Transactions
 
-📦 Tech Stack:
-Next.js 14 • Tailwind CSS • Solana Web3.js • Ethers.js • BitcoinJS • LocalStorage
+* Send crypto transactions
+* Real BNB Mainnet transaction tested
+* Gas estimation support
+* Network-based transaction handling
 
-#TrustWalletClone #Web3Wallet #Nextjs #Solana #Bitcoin #EVM #CryptoApp #BlockchainDevelopment #Web3Tutorial #CryptoWallet #DeFiApp #FullStackWeb3
+### 🪙 Token Support
 
-## Instruction
+* Custom token import
+* ERC20 metadata fetching
+* Token balance fetching
+* Multi-network token handling
 
-Kindly follow the following Instructions to run the project in your system and install the necessary requirements
+### 🌐 Blockchain Infrastructure
 
-#### Deploying Dapp
+* Ankr RPC integration for EVM chains
+* Alchemy RPC integration for Solana
+* Real blockchain interaction using ethers.js
 
-```
-  WATCH: Hostinger
-  Get : Discount 75%
-  URL: https://www.hostg.xyz/aff_c?offer_id=6&aff_id=139422
-```
+### 🎨 UI / UX
 
-### MULTI-CURRENCY ICO DAPP
+* Modern navy blue Web3 theme
+* Glassmorphism-inspired cards
+* Responsive mobile-friendly UI
+* TrustWallet-inspired design
+* Smooth animations and transitions
 
-```
-  PROJECT: MULTI-CURRENCY ICO DAPP
-  Code: https://www.theblockchaincoders.com/sourceCode/multi-currency-ico-dapp-using-next.js-solidity-and-wagmi
-  VIDEO: https://youtu.be/j8NO8ea5zVo?si=jCmvfXmpmefwjhO5
-```
+---
 
-#### Install Vs Code Editor
+## 🛠️ Tech Stack
 
-```
-  GET: VsCode Editor
-  URL: https://code.visualstudio.com/download
-```
+### Frontend
 
-#### NodeJs & NPM Version
+* Next.js 14
+* TypeScript
+* Tailwind CSS
+* React
 
-```
-  NodeJs: 20 / LATEST
-  URL: https://nodejs.org/en/download
-  Video: https://youtu.be/PIR0oBVowXU?si=9eNdR29u37F2ujJJ
-```
+### Blockchain
 
-All you need to follow the complete project and follow the instructions which are explained in the tutorial by Daulat
+* ethers.js
+* Solana Web3.js
+* BIP39
+* tiny-secp256k1
 
-## Final Code Instruction
+### RPC Providers
 
-If you download the final source code then you can follow the following instructions to run the Dapp successfully
+* Ankr
+* Alchemy
 
-#### ARNK
+---
 
-```
-  OPEN: ARNK
-  URL: https://www.ankr.com/rpc/
-```
+## ⚙️ Environment Variables
 
-#### TATUM
+Create a `.env` file in the root directory:
 
-```
-  OPEN: TATUM.COM
-  URL: https://tatum.io/
-```
-
-#### reown
-
-```
-  OPEN: WALLET CONNECT
-  URL: https://docs.reown.com/cloud/relay
+```env
+NEXT_PUBLIC_ANKR_API_KEY=your_ankr_api_key
+NEXT_PUBLIC_ALCHEMY_SOLANA_API_KEY=your_alchemy_api_key
 ```
 
-## Important Links
+---
 
-- [Get Pro Blockchain Developer Course](https://www.theblockchaincoders.com/pro-nft-marketplace)
-- [Support Creator](https://bit.ly/Support-Creator)
-- [All Projects Source Code](https://www.theblockchaincoders.com/SourceCode)
+## 📦 Installation
 
-## Authors
+```bash
+npm install
+```
 
-- [@theblockchaincoders.com](https://www.theblockchaincoders.com/)
-- [@consultancy](https://www.theblockchaincoders.com/consultancy)
-- [@youtube](https://www.youtube.com/@daulathussain)
+---
+
+## ▶️ Run Development Server
+
+```bash
+npm run dev
+```
+
+Open:
+
+```bash
+http://localhost:3000
+```
+
+---
+
+## 🧠 Architecture Overview
+
+This project is a:
+
+> Multi-chain non-custodial crypto wallet
+
+The wallet does not create its own blockchain.
+Instead, it interacts with existing blockchains using RPC providers.
+
+### Current Architecture
+
+* Local wallet storage using browser localStorage
+* RPC-based blockchain communication
+* Real blockchain transaction support
+* Multi-network account generation
+* Token metadata fetching through smart contracts
+
+---
+
+## 🔒 Security Notes
+
+### Current State
+
+* Wallet data stored in localStorage
+* Recovery phrase export supported
+* Private key export supported
+
+### Planned Improvements
+
+* AES encryption for wallet credentials
+* Secure vault architecture
+* Multi-wallet support
+* Password-protected wallet access
+* Enhanced key management
+
+---
+
+## 📌 Planned Features
+
+* Multi-wallet support
+* WalletConnect integration
+* NFT support
+* Swap functionality
+* Transaction history APIs
+* Browser extension version
+* Portfolio tracking
+* Push notifications
+* QR payments
+* dApp browser
+
+---
+
+## 🧪 Current Status
+
+### Successfully Tested
+
+✅ Real BNB Mainnet transaction
+
+✅ Blockchain RPC integration
+
+✅ Wallet creation/import
+
+✅ Custom token handling
+
+✅ Transaction signing
+
+✅ Multi-chain balance fetching
+
+---
+
+## 📁 Project Structure
+
+```bash
+app/
+components/
+services/
+config/
+types/
+utils/
+public/
+```
+
+---
+
+## 👨‍💻 Developer
+
+Built and customized by Pulkit Antil.
+
+---
+
+## ⚠️ Disclaimer
+
+This project is currently intended for learning, experimentation and development purposes.
+Do not use it to store large amounts of real crypto funds until production-grade security is implemented.
