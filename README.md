@@ -1,4 +1,4 @@
-# Trust Wallet Clone Web3 App
+# AVG Wallet Web3 App
 
 ![alt text](https://www.daulathussain.com/wp-content/uploads/2025/11/Create-Deploy-Trust-Wallet-Clone-Web3-App-Using-Next.js-Solana-Bitcoin-EVM-Chains-Full-Stack-Web3-Wallet.jpg)
 

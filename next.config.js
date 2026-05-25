@@ -1,7 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  webpack: (config, { isServer }) => {
+
+  output: 'export',
+
+  assetPrefix: './',
+
+  distDir: 'build',
+
+  webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -9,14 +16,12 @@ const nextConfig = {
       tls: false,
     };
 
-    // Enable WebAssembly
     config.experiments = {
       ...config.experiments,
       asyncWebAssembly: true,
       layers: true,
     };
 
-    // Handle .wasm files
     config.module.rules.push({
       test: /\.wasm$/,
       type: 'webassembly/async',

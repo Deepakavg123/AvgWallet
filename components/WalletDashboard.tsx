@@ -16,7 +16,7 @@ type FooterTab = 'assets' | 'history' | 'account';
 
 export default function WalletDashboard() {
   const [wallet, setWallet] = useState<MultiChainWallet | null>(null);
-  const [selectedNetwork, setSelectedNetwork] = useState<BlockchainNetwork>('ethereum');
+  const [selectedNetwork, setSelectedNetwork] = useState<BlockchainNetwork>('binance');
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [tokenBalances, setTokenBalances] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);

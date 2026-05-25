@@ -1,10 +1,10 @@
 import { MultiChainWallet, Token, Transaction } from '@/types';
 
 const STORAGE_KEYS = {
-  WALLET: 'trust_wallet_data',
-  TOKENS: 'trust_wallet_tokens',
-  TRANSACTIONS: 'trust_wallet_transactions',
-  SETTINGS: 'trust_wallet_settings',
+  WALLET: 'avg_wallet_data',
+  TOKENS: 'avg_wallet_tokens',
+  TRANSACTIONS: 'avg_wallet_transactions',
+  SETTINGS: 'avg_wallet_settings',
 } as const;
 
 export class StorageService {

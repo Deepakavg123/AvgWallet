@@ -132,7 +132,7 @@ export default function ExportWallet({ wallet, onBack }: ExportWalletProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="bg-trust-blue text-white p-6">
+      <div className="bg-gradient-to-r from-[#0B1220] via-[#13203A] to-[#1E3A5F] text-white p-6 border-b border-white/10 shadow-xl">
         <button
           onClick={onBack}
           className="flex items-center gap-2 mb-4 hover:opacity-80 transition-opacity"
